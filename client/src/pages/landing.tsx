@@ -113,7 +113,7 @@ export default function Landing() {
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Code className="text-white w-4 h-4" />
               </div>
-              <h1 className="text-xl font-semibold text-slate-900">CodeInterview</h1>
+              <h1 className="text-xl font-semibold text-slate-900">Jobillo</h1>
             </div>
 
           </div>
