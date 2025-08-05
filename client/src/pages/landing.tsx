@@ -116,9 +116,6 @@ export default function Landing() {
               <h1 className="text-xl font-semibold text-slate-900">CodeInterview</h1>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-slate-600 hover:text-slate-900 transition-colors">Features</a>
-              <a href="#" className="text-slate-600 hover:text-slate-900 transition-colors">Pricing</a>
-              <a href="#" className="text-slate-600 hover:text-slate-900 transition-colors">Support</a>
               <Button variant="default">Sign In</Button>
             </nav>
           </div>
