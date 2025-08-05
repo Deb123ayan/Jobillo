@@ -128,9 +128,9 @@ export class MemStorage implements IStorage {
     const codeState: CodeState = {
       id: existing?.id || randomUUID(),
       roomId: update.roomId,
-      content: update.content,
-      language: update.language,
-      lastModifiedBy: update.lastModifiedBy,
+      content: update.content || "",
+      language: update.language || "javascript",
+      lastModifiedBy: update.lastModifiedBy || null,
       version: update.version,
       updatedAt: new Date(),
     };

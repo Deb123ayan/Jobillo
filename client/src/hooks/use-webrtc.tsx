@@ -64,7 +64,7 @@ export function useWebRTC(socket: WebSocket | null, participantId: string) {
             type: 'ice-candidate',
             candidate: event.candidate,
           },
-          targetParticipantId: 'other', // In a real app, this would be the specific participant
+          targetParticipantId: null, // Broadcast to all participants in room
         }));
       }
     };

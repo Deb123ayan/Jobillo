@@ -25,7 +25,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/rooms/:code/join", async (req, res) => {
     try {
       const { code } = req.params;
-      const participantData = insertParticipantSchema.parse(req.body);
+      const { name, role } = req.body;
+      
+      // Validate required fields
+      if (!name || !role) {
+        return res.status(400).json({ error: "Name and role are required" });
+      }
+
+      if (!["interviewer", "candidate"].includes(role)) {
+        return res.status(400).json({ error: "Role must be 'interviewer' or 'candidate'" });
+      }
       
       const room = await storage.getRoomByCode(code);
       if (!room) {
@@ -33,9 +42,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const participant = await storage.addParticipant({
-        ...participantData,
         roomId: room.id,
+        name,
+        role,
       });
+
+      // Store participant data in response for client to save
+      const participantData = {
+        id: participant.id,
+        name: participant.name,
+        role: participant.role,
+        roomId: room.id,
+      };
 
       const participants = await storage.getParticipantsByRoom(room.id);
       const messages = await storage.getMessagesByRoom(room.id);
@@ -43,13 +61,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         room,
-        participant,
+        participant: participantData,
         participants,
         messages,
         codeState,
       });
     } catch (error) {
-      res.status(400).json({ error: "Invalid participant data" });
+      console.error("Join room error:", error);
+      res.status(400).json({ error: "Failed to join room" });
     }
   });
 
@@ -114,7 +133,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               if (client !== ws && 
                   client.readyState === WebSocket.OPEN && 
                   client.roomId === ws.roomId &&
-                  client.participantId === message.targetParticipantId) {
+                  (message.targetParticipantId === null || client.participantId === message.targetParticipantId)) {
                 client.send(JSON.stringify({
                   type: 'webrtc-signal',
                   signal: message.signal,

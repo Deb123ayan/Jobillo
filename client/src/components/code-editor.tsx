@@ -79,8 +79,8 @@ export default function CodeEditor({ initialCode, roomId, participantId, socket 
           // Simple evaluation for demo - in production, use a sandboxed environment
           const result = eval(code);
           setOutput(`$ node interview.js\n${result}\nProcess finished with exit code 0`);
-        } catch (error) {
-          setOutput(`$ node interview.js\nError: ${error}\nProcess finished with exit code 1`);
+        } catch (error: any) {
+          setOutput(`$ node interview.js\nError: ${error.message}\nProcess finished with exit code 1`);
         }
       } else {
         setOutput(`$ ${language} interview.${getFileExtension(language)}\nCode execution for ${language} not implemented in demo\nProcess finished with exit code 0`);

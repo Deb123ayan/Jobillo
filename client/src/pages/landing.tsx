@@ -40,6 +40,9 @@ export default function Landing() {
       });
       const joinData = await joinResponse.json();
       
+      // Store participant data for the interview session
+      localStorage.setItem(`participant_${joinData.room.id}`, JSON.stringify(joinData.participant));
+      
       setLocation(`/interview/${joinData.room.id}`);
     },
     onError: () => {
@@ -60,6 +63,9 @@ export default function Landing() {
       return response.json();
     },
     onSuccess: (data) => {
+      // Store participant data for the interview session
+      localStorage.setItem(`participant_${data.room.id}`, JSON.stringify(data.participant));
+      
       setLocation(`/interview/${data.room.id}`);
     },
     onError: () => {
