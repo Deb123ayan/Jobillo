@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Code, Video, Share, Plus, LogIn } from "lucide-react";
+import { Code, Video, MessageCircle, Share, Plus, LogIn } from "lucide-react";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -104,112 +104,161 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Code className="text-white w-4 h-4" />
-              </div>
-              <h1 className="text-xl font-semibold text-slate-900">Jobillo</h1>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-32 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-32 -left-40 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
 
+      {/* Header */}
+      <header className="relative border-b border-white/20 bg-white/40 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Code className="text-white w-6 h-6" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Jobillo</h1>
+                <p className="text-xs text-slate-500 font-medium">Remote Interview Platform</p>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 text-sm font-medium rounded-full mb-8">
+            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
+            Live Coding • Video Calls • Real-time Chat
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-8 leading-tight">
             Interview with Code,<br />
-            <span className="text-blue-600">Face to Face</span>
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              Face to Face
+            </span>
           </h1>
-          <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
-            Conduct technical interviews with video calling and real-time collaborative coding. 
-            Perfect for remote hiring and pair programming sessions.
+          
+          <p className="text-xl text-slate-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Transform your hiring process with seamless video interviews, collaborative coding environments, 
+            and real-time communication tools. Built for modern teams.
           </p>
+
+          {/* Feature highlights */}
+          <div className="flex flex-wrap justify-center gap-6 mb-16">
+            <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm">
+              <Video className="w-5 h-5 text-blue-600 mr-2" />
+              <span className="text-slate-700 font-medium">HD Video Calls</span>
+            </div>
+            <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm">
+              <Code className="w-5 h-5 text-purple-600 mr-2" />
+              <span className="text-slate-700 font-medium">Live Code Editor</span>
+            </div>
+            <div className="flex items-center px-4 py-2 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm">
+              <MessageCircle className="w-5 h-5 text-indigo-600 mr-2" />
+              <span className="text-slate-700 font-medium">Real-time Chat</span>
+            </div>
+          </div>
         </div>
 
         {/* Room Creation/Join Section */}
-        <div className="max-w-md mx-auto mb-16">
-          <Card className="shadow-lg border border-slate-200 p-8">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-semibold text-slate-900 mb-2">Start Your Interview</h2>
-              <p className="text-slate-600">Create a new room or join an existing session</p>
+        <div className="max-w-lg mx-auto mb-20">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-10">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Code className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-3">Start Your Interview</h2>
+              <p className="text-slate-600 text-lg">Create a new room or join an existing session</p>
             </div>
 
             <Tabs defaultValue="create" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="create">Create Room</TabsTrigger>
-                <TabsTrigger value="join">Join Room</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 mb-8 bg-slate-100/50 p-1 rounded-2xl">
+                <TabsTrigger value="create" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Room
+                </TabsTrigger>
+                <TabsTrigger value="join" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Join Room
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="create">
-                <form onSubmit={handleCreateRoom} className="space-y-4">
-                  <div>
-                    <Label htmlFor="create-name">Your Name</Label>
+                <form onSubmit={handleCreateRoom} className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="create-name" className="text-slate-700 font-medium">Your Name</Label>
                     <Input
                       id="create-name"
                       placeholder="Enter your name"
                       value={createForm.name}
                       onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
+                      className="h-12 rounded-xl border-slate-200 bg-white/50 backdrop-blur-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="create-title">Interview Title</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="create-title" className="text-slate-700 font-medium">Interview Title</Label>
                     <Input
                       id="create-title"
                       placeholder="e.g., Frontend Developer Interview"
                       value={createForm.title}
                       onChange={(e) => setCreateForm({ ...createForm, title: e.target.value })}
+                      className="h-12 rounded-xl border-slate-200 bg-white/50 backdrop-blur-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
                     disabled={createRoomMutation.isPending}
                   >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Interview Room
+                    <Plus className="w-5 h-5 mr-2" />
+                    {createRoomMutation.isPending ? "Creating..." : "Create Interview Room"}
                   </Button>
                 </form>
               </TabsContent>
 
               <TabsContent value="join">
-                <form onSubmit={handleJoinRoom} className="space-y-4">
-                  <div>
-                    <Label htmlFor="join-name">Your Name</Label>
+                <form onSubmit={handleJoinRoom} className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="join-name" className="text-slate-700 font-medium">Your Name</Label>
                     <Input
                       id="join-name"
                       placeholder="Enter your name"
                       value={joinForm.name}
                       onChange={(e) => setJoinForm({ ...joinForm, name: e.target.value })}
+                      className="h-12 rounded-xl border-slate-200 bg-white/50 backdrop-blur-sm focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="join-code">Room Code</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="join-code" className="text-slate-700 font-medium">Room Code</Label>
                     <Input
                       id="join-code"
                       placeholder="Enter 6-digit room code"
                       value={joinForm.code}
                       onChange={(e) => setJoinForm({ ...joinForm, code: e.target.value.toUpperCase() })}
+                      className="h-12 rounded-xl border-slate-200 bg-white/50 backdrop-blur-sm focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-center text-lg tracking-wider"
                     />
                   </div>
                   <Button 
                     type="submit" 
-                    className="w-full bg-green-600 hover:bg-green-700"
+                    className="w-full h-12 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
                     disabled={joinRoomMutation.isPending}
                   >
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Join Interview
+                    <LogIn className="w-5 h-5 mr-2" />
+                    {joinRoomMutation.isPending ? "Joining..." : "Join Interview"}
                   </Button>
                 </form>
               </TabsContent>
             </Tabs>
-          </Card>
+          </div>
         </div>
 
         {/* Features Section */}

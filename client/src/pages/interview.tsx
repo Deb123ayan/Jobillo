@@ -85,43 +85,43 @@ export default function Interview({ params }: InterviewPageProps) {
   return (
     <div className="min-h-screen bg-slate-900">
       {/* Top Header */}
-      <header className="bg-slate-800 border-b border-slate-700 px-4 py-3">
+      <header className="bg-slate-800/95 backdrop-blur-xl border-b border-slate-700/50 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-                <Code className="text-white w-3 h-3" />
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Code className="text-white w-4 h-4" />
               </div>
-              <span className="text-white font-medium">CodeInterview</span>
+              <span className="text-white font-bold text-lg bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Jobillo</span>
             </div>
-            <div className="h-6 w-px bg-slate-600"></div>
+            <div className="h-8 w-px bg-gradient-to-b from-slate-600 to-slate-700"></div>
             <div className="text-slate-300">
-              <span className="text-sm">{roomData.room.title}</span>
-              <span className="text-xs text-slate-400 ml-2">Room: {roomData.room.code}</span>
+              <div className="font-semibold text-white">{roomData.room.title}</div>
+              <div className="text-xs text-slate-400 font-mono">Room: {roomData.room.code}</div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             {/* Connection Status */}
-            <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-              <span className="text-sm text-slate-300">{isConnected ? 'Connected' : 'Disconnected'}</span>
+            <div className="flex items-center space-x-3 px-3 py-2 bg-slate-700/50 rounded-xl backdrop-blur-sm">
+              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400 shadow-lg shadow-green-400/50 animate-pulse' : 'bg-red-400 shadow-lg shadow-red-400/50'}`}></div>
+              <span className="text-sm text-slate-300 font-medium">{isConnected ? 'Connected' : 'Disconnected'}</span>
             </div>
 
             {/* Recording Status */}
             <Button
               onClick={toggleRecording}
-              className={`${isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-600 hover:bg-slate-700'} px-3 py-1.5`}
+              className={`${isRecording ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-lg shadow-red-500/25' : 'bg-slate-600/50 hover:bg-slate-600 backdrop-blur-sm'} px-4 py-2 rounded-xl border border-white/10`}
               size="sm"
             >
-              <div className={`w-2 h-2 rounded-full mr-2 ${isRecording ? 'bg-white animate-pulse' : 'bg-slate-400'}`}></div>
-              <span className="text-white text-sm">{isRecording ? 'Recording' : 'Record'}</span>
+              <div className={`w-3 h-3 rounded-full mr-2 ${isRecording ? 'bg-white animate-pulse shadow-white/50' : 'bg-slate-400'}`}></div>
+              <span className="text-white text-sm font-medium">{isRecording ? 'Recording' : 'Record'}</span>
             </Button>
 
             {/* Leave Button */}
             <Button
               onClick={handleLeaveInterview}
-              variant="destructive"
+              className="bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/50 backdrop-blur-sm px-4 py-2 rounded-xl transition-all duration-200"
               size="sm"
             >
               <LogOut className="w-4 h-4 mr-2" />
