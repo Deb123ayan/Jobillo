@@ -115,9 +115,7 @@ export default function Landing() {
               </div>
               <h1 className="text-xl font-semibold text-slate-900">CodeInterview</h1>
             </div>
-            <nav className="hidden md:flex items-center space-x-8">
-              <Button variant="default">Sign In</Button>
-            </nav>
+
           </div>
         </div>
       </header>
