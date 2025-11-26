@@ -1,8 +1,7 @@
 import { 
   type Room, type InsertRoom,
   type Participant, type InsertParticipant,
-  type Message, type InsertMessage,
-  type CodeState, type InsertCodeState
+  type Message, type InsertMessage
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
@@ -21,23 +20,17 @@ export interface IStorage {
   // Messages
   addMessage(message: InsertMessage): Promise<Message>;
   getMessagesByRoom(roomId: string): Promise<Message[]>;
-  
-  // Code States
-  updateCodeState(codeState: InsertCodeState & { version: number }): Promise<CodeState>;
-  getCodeState(roomId: string): Promise<CodeState | undefined>;
 }
 
 export class MemStorage implements IStorage {
   private rooms: Map<string, Room>;
   private participants: Map<string, Participant>;
   private messages: Map<string, Message>;
-  private codeStates: Map<string, CodeState>;
 
   constructor() {
     this.rooms = new Map();
     this.participants = new Map();
     this.messages = new Map();
-    this.codeStates = new Map();
   }
 
   async createRoom(insertRoom: InsertRoom): Promise<{ room: Room; code: string }> {
@@ -51,19 +44,6 @@ export class MemStorage implements IStorage {
       createdAt: new Date(),
     };
     this.rooms.set(id, room);
-    
-    // Initialize code state for the room
-    const codeStateId = randomUUID();
-    const codeState: CodeState = {
-      id: codeStateId,
-      roomId: id,
-      content: "// Welcome to the collaborative coding interview!\n// Both interviewer and candidate can edit this code in real-time\n\nfunction fibonacci(n) {\n    if (n <= 1) {\n        return n;\n    }\n    return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\n// TODO: Optimize this function\n// Hint: Consider using dynamic programming\n\nconsole.log(fibonacci(10));\n\n// Feel free to ask questions and discuss your approach!",
-      language: "javascript",
-      lastModifiedBy: null,
-      version: 0,
-      updatedAt: new Date(),
-    };
-    this.codeStates.set(id, codeState);
     
     return { room, code };
   }
@@ -123,24 +103,7 @@ export class MemStorage implements IStorage {
       .sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
   }
 
-  async updateCodeState(update: InsertCodeState & { version: number }): Promise<CodeState> {
-    const existing = this.codeStates.get(update.roomId);
-    const codeState: CodeState = {
-      id: existing?.id || randomUUID(),
-      roomId: update.roomId,
-      content: update.content || "",
-      language: update.language || "javascript",
-      lastModifiedBy: update.lastModifiedBy || null,
-      version: update.version,
-      updatedAt: new Date(),
-    };
-    this.codeStates.set(update.roomId, codeState);
-    return codeState;
-  }
 
-  async getCodeState(roomId: string): Promise<CodeState | undefined> {
-    return this.codeStates.get(roomId);
-  }
 }
 
 export const storage = new MemStorage();

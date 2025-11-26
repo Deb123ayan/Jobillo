@@ -31,15 +31,7 @@ export const messages = pgTable("messages", {
   timestamp: timestamp("timestamp").defaultNow(),
 });
 
-export const codeStates = pgTable("code_states", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  roomId: varchar("room_id").notNull().references(() => rooms.id),
-  content: text("content").notNull().default(""),
-  language: text("language").notNull().default("javascript"),
-  lastModifiedBy: varchar("last_modified_by").references(() => participants.id),
-  version: integer("version").notNull().default(0),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
+
 
 export const insertRoomSchema = createInsertSchema(rooms).pick({
   title: true,
@@ -59,19 +51,10 @@ export const insertMessageSchema = createInsertSchema(messages).pick({
   type: true,
 });
 
-export const insertCodeStateSchema = createInsertSchema(codeStates).pick({
-  roomId: true,
-  content: true,
-  language: true,
-  lastModifiedBy: true,
-});
-
 export type InsertRoom = z.infer<typeof insertRoomSchema>;
 export type InsertParticipant = z.infer<typeof insertParticipantSchema>;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
-export type InsertCodeState = z.infer<typeof insertCodeStateSchema>;
 
 export type Room = typeof rooms.$inferSelect;
 export type Participant = typeof participants.$inferSelect;
 export type Message = typeof messages.$inferSelect;
-export type CodeState = typeof codeStates.$inferSelect;

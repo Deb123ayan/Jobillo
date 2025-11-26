@@ -1,0 +1,587 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeInterview - Video Calling Interview Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 font-sans">
+    <!-- @COMPONENT: LandingPage -->
+    <div id="landingPage" class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-code text-white text-sm"></i>
+                        </div>
+                        <h1 class="text-xl font-semibold text-slate-900">CodeInterview</h1>
+                    </div>
+                    <nav class="hidden md:flex items-center space-x-8">
+                        <a href="#" class="text-slate-600 hover:text-slate-900 transition-colors">Features</a>
+                        <a href="#" class="text-slate-600 hover:text-slate-900 transition-colors">Pricing</a>
+                        <a href="#" class="text-slate-600 hover:text-slate-900 transition-colors">Support</a>
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Sign In</button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Landing Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+                    Interview with Code,<br>
+                    <span class="text-blue-600">Face to Face</span>
+                </h1>
+                <p class="text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+                    Conduct technical interviews with video calling and real-time collaborative coding. 
+                    Perfect for remote hiring and pair programming sessions.
+                </p>
+            </div>
+
+            <!-- Room Creation/Join Section -->
+            <div class="max-w-md mx-auto bg-white rounded-2xl shadow-lg border border-slate-200 p-8 mb-16">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-semibold text-slate-900 mb-2">Start Your Interview</h2>
+                    <p class="text-slate-600">Create a new room or join an existing session</p>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="flex bg-slate-100 rounded-lg p-1 mb-6">
+                    <button class="flex-1 py-2 px-4 rounded-md bg-white text-blue-600 font-medium shadow-sm transition-all" data-tab="create">
+                        Create Room
+                    </button>
+                    <button class="flex-1 py-2 px-4 rounded-md text-slate-600 hover:text-slate-900 transition-colors" data-tab="join">
+                        Join Room
+                    </button>
+                </div>
+
+                <!-- Create Room Tab -->
+                <div id="createTab" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Your Name</label>
+                        <input type="text" placeholder="Enter your name" data-mock="true" 
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Interview Title</label>
+                        <input type="text" placeholder="e.g., Frontend Developer Interview" data-mock="true"
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium" 
+                            data-event="click:createRoom" data-implementation="Should create room and redirect to interview interface">
+                        <i class="fas fa-plus mr-2"></i>Create Interview Room
+                    </button>
+                </div>
+
+                <!-- Join Room Tab -->
+                <div id="joinTab" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Your Name</label>
+                        <input type="text" placeholder="Enter your name" data-mock="true"
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Room Code</label>
+                        <input type="text" placeholder="Enter 6-digit room code" data-mock="true"
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                    </div>
+                    <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                            data-event="click:joinRoom" data-implementation="Should validate room code and join session">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Join Interview
+                    </button>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-video text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">HD Video Calling</h3>
+                    <p class="text-slate-600">Crystal clear video and audio for professional interviews</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-code text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Live Code Editor</h3>
+                    <p class="text-slate-600">Real-time collaborative coding with syntax highlighting</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-share-square text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Screen Sharing</h3>
+                    <p class="text-slate-600">Share your screen to review code or discuss concepts</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- @END_COMPONENT: LandingPage -->
+
+    <!-- @COMPONENT: InterviewInterface -->
+    <div id="interviewInterface" class="hidden min-h-screen bg-slate-900">
+        <!-- Top Header -->
+        <header class="bg-slate-800 border-b border-slate-700 px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
+                            <i class="fas fa-code text-white text-xs"></i>
+                        </div>
+                        <span class="text-white font-medium">CodeInterview</span>
+                    </div>
+                    <div class="h-6 w-px bg-slate-600"></div>
+                    <div class="text-slate-300">
+                        <span class="text-sm" data-bind="room.title">Frontend Developer Interview</span>
+                        <span class="text-xs text-slate-400 ml-2">Room: <span data-bind="room.code">ABC123</span></span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Connection Status -->
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <span class="text-sm text-slate-300">Connected</span>
+                    </div>
+
+                    <!-- Recording Status -->
+                    <button class="flex items-center space-x-2 bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg transition-colors"
+                            data-event="click:toggleRecording" data-implementation="Should start/stop session recording">
+                        <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                        <span class="text-white text-sm">Recording</span>
+                    </button>
+
+                    <!-- Leave Button -->
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                            data-event="click:leaveInterview" data-implementation="Should disconnect and return to landing">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Leave
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Interface -->
+        <div class="flex h-[calc(100vh-64px)]">
+            <!-- Left Panel - Video & Controls -->
+            <div class="w-80 bg-slate-800 border-r border-slate-700 flex flex-col">
+                <!-- Video Containers -->
+                <div class="p-4 space-y-4 flex-1">
+                    <!-- Interviewer Video -->
+                    <div class="relative">
+                        <div class="aspect-video bg-slate-700 rounded-lg overflow-hidden relative">
+                            <!-- Placeholder for video feed -->
+                            <div class="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <p class="text-white text-sm" data-bind="interviewer.name">Sarah Johnson</p>
+                                    <p class="text-blue-200 text-xs">Interviewer</p>
+                                </div>
+                            </div>
+                            <!-- Video controls overlay -->
+                            <div class="absolute bottom-2 left-2 flex space-x-2">
+                                <button class="w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors"
+                                        data-event="click:toggleMute" data-implementation="Should mute/unmute audio">
+                                    <i class="fas fa-microphone text-white text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors"
+                                        data-event="click:toggleVideo" data-implementation="Should enable/disable video">
+                                    <i class="fas fa-video text-white text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Candidate Video -->
+                    <div class="relative">
+                        <div class="aspect-video bg-slate-700 rounded-lg overflow-hidden relative">
+                            <!-- Placeholder for video feed -->
+                            <div class="w-full h-full bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <p class="text-white text-sm" data-bind="candidate.name">Alex Rodriguez</p>
+                                    <p class="text-green-200 text-xs">Candidate</p>
+                                </div>
+                            </div>
+                            <!-- Video controls overlay -->
+                            <div class="absolute bottom-2 left-2 flex space-x-2">
+                                <button class="w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fas fa-microphone text-white text-xs"></i>
+                                </button>
+                                <button class="w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fas fa-video text-white text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Controls -->
+                <div class="p-4 border-t border-slate-700">
+                    <div class="grid grid-cols-3 gap-2">
+                        <button class="flex flex-col items-center py-3 px-2 rounded-lg hover:bg-slate-700 transition-colors group"
+                                data-event="click:toggleAudio" data-implementation="Should toggle microphone">
+                            <i class="fas fa-microphone text-slate-400 group-hover:text-white transition-colors mb-1"></i>
+                            <span class="text-xs text-slate-400 group-hover:text-white transition-colors">Mic</span>
+                        </button>
+                        <button class="flex flex-col items-center py-3 px-2 rounded-lg hover:bg-slate-700 transition-colors group"
+                                data-event="click:toggleCamera" data-implementation="Should toggle camera">
+                            <i class="fas fa-video text-slate-400 group-hover:text-white transition-colors mb-1"></i>
+                            <span class="text-xs text-slate-400 group-hover:text-white transition-colors">Camera</span>
+                        </button>
+                        <button class="flex flex-col items-center py-3 px-2 rounded-lg hover:bg-slate-700 transition-colors group"
+                                data-event="click:shareScreen" data-implementation="Should start screen sharing">
+                            <i class="fas fa-desktop text-slate-400 group-hover:text-white transition-colors mb-1"></i>
+                            <span class="text-xs text-slate-400 group-hover:text-white transition-colors">Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel - Code Editor -->
+            <div class="flex-1 bg-slate-900 flex flex-col">
+                <!-- Editor Header -->
+                <div class="bg-slate-800 border-b border-slate-700 px-4 py-2 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-code text-blue-400"></i>
+                            <span class="text-slate-300 font-medium">Collaborative Editor</span>
+                        </div>
+                        
+                        <!-- Language Selector -->
+                        <select class="bg-slate-700 text-slate-300 border border-slate-600 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                data-event="change:changeLanguage" data-implementation="Should change syntax highlighting">
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="cpp">C++</option>
+                            <option value="html">HTML</option>
+                            <option value="css">CSS</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <!-- Active Users -->
+                        <div class="flex items-center space-x-2">
+                            <div class="flex -space-x-1">
+                                <div class="w-6 h-6 bg-blue-600 rounded-full border-2 border-slate-800 flex items-center justify-center">
+                                    <span class="text-white text-xs font-medium">S</span>
+                                </div>
+                                <div class="w-6 h-6 bg-green-600 rounded-full border-2 border-slate-800 flex items-center justify-center">
+                                    <span class="text-white text-xs font-medium">A</span>
+                                </div>
+                            </div>
+                            <span class="text-slate-400 text-sm">2 editing</span>
+                        </div>
+
+                        <!-- Editor Actions -->
+                        <button class="text-slate-400 hover:text-white transition-colors"
+                                data-event="click:runCode" data-implementation="Should execute code in sandbox">
+                            <i class="fas fa-play mr-1"></i>Run
+                        </button>
+                        <button class="text-slate-400 hover:text-white transition-colors"
+                                data-event="click:resetCode" data-implementation="Should clear editor content">
+                            <i class="fas fa-undo mr-1"></i>Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code Editor Area -->
+                <div class="flex-1 relative">
+                    <!-- Line Numbers -->
+                    <div class="absolute left-0 top-0 w-12 h-full bg-slate-800 border-r border-slate-700 py-4">
+                        <div class="font-mono text-xs text-slate-500 text-right pr-2 space-y-1">
+                            <!-- @MAP: Array.from({length: 25}, (_, i) => ( -->
+                            <div class="leading-6" data-mock="true">1</div>
+                            <div class="leading-6" data-mock="true">2</div>
+                            <div class="leading-6" data-mock="true">3</div>
+                            <div class="leading-6" data-mock="true">4</div>
+                            <div class="leading-6" data-mock="true">5</div>
+                            <div class="leading-6" data-mock="true">6</div>
+                            <div class="leading-6" data-mock="true">7</div>
+                            <div class="leading-6" data-mock="true">8</div>
+                            <div class="leading-6" data-mock="true">9</div>
+                            <div class="leading-6" data-mock="true">10</div>
+                            <div class="leading-6" data-mock="true">11</div>
+                            <div class="leading-6" data-mock="true">12</div>
+                            <div class="leading-6" data-mock="true">13</div>
+                            <div class="leading-6" data-mock="true">14</div>
+                            <div class="leading-6" data-mock="true">15</div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+
+                    <!-- Editor Content -->
+                    <div class="ml-12 h-full">
+                        <textarea class="w-full h-full bg-slate-900 text-slate-100 font-mono text-sm p-4 border-none outline-none resize-none leading-6"
+                                  placeholder="Start coding here... This editor supports real-time collaboration!"
+                                  data-implementation="Should implement Monaco Editor or CodeMirror with WebRTC sync"
+                                  data-mock="true">// Welcome to the collaborative coding interview!
+// Both interviewer and candidate can edit this code in real-time
+
+function fibonacci(n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// TODO: Optimize this function
+// Hint: Consider using dynamic programming
+
+console.log(fibonacci(10));
+
+// Feel free to ask questions and discuss your approach!</textarea>
+                    </div>
+
+                    <!-- Collaborative Cursors -->
+                    <!-- @FUNCTIONALITY: Show real-time cursor positions of other users -->
+                    <div class="absolute top-20 left-32 w-0.5 h-6 bg-blue-400 animate-pulse"></div>
+                    <div class="absolute top-20 left-32 -mt-6 bg-blue-600 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                        Sarah is typing...
+                    </div>
+                </div>
+
+                <!-- Code Output Panel -->
+                <div class="h-32 bg-slate-800 border-t border-slate-700">
+                    <div class="flex items-center justify-between px-4 py-2 border-b border-slate-700">
+                        <span class="text-slate-300 font-medium">Output</span>
+                        <button class="text-slate-400 hover:text-white transition-colors"
+                                data-event="click:clearOutput" data-implementation="Should clear output panel">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-4 font-mono text-sm text-slate-300 overflow-auto h-20" data-mock="true">
+                        <div class="text-green-400">$ node interview.js</div>
+                        <div>55</div>
+                        <div class="text-slate-500">Process finished with exit code 0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Chat -->
+            <div class="w-80 bg-slate-800 border-l border-slate-700 flex flex-col">
+                <!-- Chat Header -->
+                <div class="p-4 border-b border-slate-700">
+                    <h3 class="text-slate-200 font-medium flex items-center">
+                        <i class="fas fa-comments mr-2 text-blue-400"></i>
+                        Interview Chat
+                    </h3>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="flex-1 p-4 overflow-y-auto space-y-4">
+                    <!-- @MAP: messages.map(message => ( -->
+                    <div class="space-y-3" data-mock="true">
+                        <!-- System Message -->
+                        <div class="text-center">
+                            <div class="inline-block bg-slate-700 text-slate-300 text-xs px-3 py-1 rounded-full">
+                                Interview session started
+                            </div>
+                        </div>
+
+                        <!-- Interviewer Message -->
+                        <div class="flex space-x-3">
+                            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-white text-xs font-medium">S</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-slate-300 text-sm font-medium" data-bind="interviewer.name">Sarah</span>
+                                    <span class="text-slate-500 text-xs">2:34 PM</span>
+                                </div>
+                                <div class="bg-slate-700 text-slate-200 text-sm p-3 rounded-lg rounded-tl-none">
+                                    Let's start with a classic algorithm question. Can you optimize the fibonacci function?
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Candidate Message -->
+                        <div class="flex space-x-3">
+                            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-white text-xs font-medium">A</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-slate-300 text-sm font-medium" data-bind="candidate.name">Alex</span>
+                                    <span class="text-slate-500 text-xs">2:35 PM</span>
+                                </div>
+                                <div class="bg-slate-700 text-slate-200 text-sm p-3 rounded-lg rounded-tl-none">
+                                    Sure! I can use memoization to avoid redundant calculations. Let me implement that.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Code Share Message -->
+                        <div class="flex space-x-3">
+                            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-code text-white text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="text-slate-300 text-sm font-medium">System</span>
+                                    <span class="text-slate-500 text-xs">2:36 PM</span>
+                                </div>
+                                <div class="bg-purple-900/50 border border-purple-700 text-slate-200 text-sm p-3 rounded-lg">
+                                    <i class="fas fa-code mr-2"></i>Alex shared a code snippet
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+
+                <!-- Chat Input -->
+                <div class="p-4 border-t border-slate-700">
+                    <div class="flex space-x-2">
+                        <input type="text" 
+                               placeholder="Type a message..." 
+                               data-mock="true"
+                               class="flex-1 bg-slate-700 text-slate-200 placeholder-slate-400 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                               data-event="keypress:sendMessage" 
+                               data-implementation="Should send message on Enter key">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                                data-event="click:sendMessage" data-implementation="Should send chat message">
+                            <i class="fas fa-paper-plane text-sm"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="flex space-x-2">
+                            <button class="text-slate-400 hover:text-white transition-colors text-sm"
+                                    data-event="click:shareCode" data-implementation="Should share current code in chat">
+                                <i class="fas fa-code mr-1"></i>Share Code
+                            </button>
+                            <button class="text-slate-400 hover:text-white transition-colors text-sm"
+                                    data-event="click:shareScreen" data-implementation="Should start screen sharing">
+                                <i class="fas fa-desktop mr-1"></i>Share Screen
+                            </button>
+                        </div>
+                        
+                        <!-- Chat Status -->
+                        <div class="flex items-center space-x-1">
+                            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            <span class="text-slate-400 text-xs">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: InterviewInterface -->
+
+    <!-- @STATE: currentView:string = 'landing' -->
+    <!-- @STATE: isRecording:boolean = false -->
+    <!-- @STATE: isMuted:boolean = false -->
+    <!-- @STATE: isCameraOn:boolean = true -->
+    <!-- @STATE: isScreenSharing:boolean = false -->
+
+    <script>
+        // Tab switching functionality
+        (function() {
+            const tabButtons = document.querySelectorAll('[data-tab]');
+            const createTab = document.getElementById('createTab');
+            const joinTab = document.getElementById('joinTab');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    // Update button styles
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+                        btn.classList.add('text-slate-600');
+                    });
+                    this.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+                    this.classList.remove('text-slate-600');
+                    
+                    // Show/hide tabs
+                    if (tabName === 'create') {
+                        createTab.classList.remove('hidden');
+                        joinTab.classList.add('hidden');
+                    } else {
+                        createTab.classList.add('hidden');
+                        joinTab.classList.remove('hidden');
+                    }
+                });
+            });
+        })();
+
+        // Demo transition functionality
+        (function() {
+            const createButton = document.querySelector('[data-event="click:createRoom"]');
+            const joinButton = document.querySelector('[data-event="click:joinRoom"]');
+            const landingPage = document.getElementById('landingPage');
+            const interviewInterface = document.getElementById('interviewInterface');
+
+            function showInterviewInterface() {
+                landingPage.classList.add('hidden');
+                interviewInterface.classList.remove('hidden');
+            }
+
+            if (createButton) {
+                createButton.addEventListener('click', showInterviewInterface);
+            }
+            
+            if (joinButton) {
+                joinButton.addEventListener('click', showInterviewInterface);
+            }
+
+            // Leave interview functionality
+            const leaveButton = document.querySelector('[data-event="click:leaveInterview"]');
+            if (leaveButton) {
+                leaveButton.addEventListener('click', function() {
+                    landingPage.classList.remove('hidden');
+                    interviewInterface.classList.add('hidden');
+                });
+            }
+        })();
+
+        // Chat input functionality
+        (function() {
+            const chatInput = document.querySelector('input[placeholder="Type a message..."]');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && this.value.trim()) {
+                        // TODO: Implement real chat message sending
+                        console.log('Sending message:', this.value);
+                        this.value = '';
+                    }
+                });
+            }
+        })();
+
+        // TODO: Implement WebRTC video calling functionality
+        // TODO: Implement real-time code editor synchronization
+        // TODO: Implement screen sharing capabilities
+        // TODO: Implement session recording
+        // TODO: Implement room management and user authentication
+        // TODO: Implement code execution in sandboxed environment
+        // TODO: Add error handling for connection issues
+        // TODO: Implement responsive design optimizations for mobile
+    </script>
+</body>
+</html>

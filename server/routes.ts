@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertRoomSchema, insertParticipantSchema, insertMessageSchema, insertCodeStateSchema } from "@shared/schema";
+import { insertRoomSchema } from "@shared/schema";
 
 interface WebSocketWithData extends WebSocket {
   roomId?: string;
@@ -57,14 +57,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const participants = await storage.getParticipantsByRoom(room.id);
       const messages = await storage.getMessagesByRoom(room.id);
-      const codeState = await storage.getCodeState(room.id);
 
       res.json({
         room,
         participant: participantData,
         participants,
         messages,
-        codeState,
       });
     } catch (error) {
       console.error("Join room error:", error);
@@ -84,18 +82,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const participants = await storage.getParticipantsByRoom(id);
       const messages = await storage.getMessagesByRoom(id);
-      const codeState = await storage.getCodeState(id);
 
       res.json({
         room,
         participants,
         messages,
-        codeState,
       });
     } catch (error) {
       res.status(500).json({ error: "Server error" });
     }
   });
+
+  // Report violation
+  app.post("/api/violations", async (req, res) => {
+    try {
+      const violation = req.body;
+      console.log('Face analysis violation reported:', {
+        type: violation.type,
+        roomId: violation.roomId,
+        participantId: violation.participantId,
+        timestamp: new Date(violation.timestamp).toISOString(),
+        confidence: violation.confidence
+      });
+      
+      // Store violation (you can add database storage here)
+      // For now, just log and acknowledge
+      res.json({ success: true });
+    } catch (error) {
+      res.status(400).json({ error: "Failed to report violation" });
+    }
+  });
+
+
 
   const httpServer = createServer(app);
   
@@ -127,21 +145,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             break;
 
-          case 'webrtc-signal':
-            // Forward WebRTC signaling messages
-            wss.clients.forEach((client: WebSocketWithData) => {
-              if (client !== ws && 
-                  client.readyState === WebSocket.OPEN && 
-                  client.roomId === ws.roomId &&
-                  (message.targetParticipantId === null || client.participantId === message.targetParticipantId)) {
-                client.send(JSON.stringify({
-                  type: 'webrtc-signal',
-                  signal: message.signal,
-                  fromParticipantId: ws.participantId,
-                }));
-              }
-            });
-            break;
+
 
           case 'chat-message':
             if (ws.roomId && ws.participantId) {
@@ -165,44 +169,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
             break;
 
-          case 'code-change':
-            if (ws.roomId && ws.participantId) {
-              const codeState = await storage.updateCodeState({
-                roomId: ws.roomId,
-                content: message.content,
-                language: message.language,
-                lastModifiedBy: ws.participantId,
-                version: message.version + 1,
-              });
-
-              // Broadcast to all other clients in the room
+          case 'violation-alert':
+            if (ws.roomId) {
+              // Notify interviewer about violations
               wss.clients.forEach((client: WebSocketWithData) => {
-                if (client !== ws && 
-                    client.readyState === WebSocket.OPEN && 
-                    client.roomId === ws.roomId) {
+                if (client.readyState === WebSocket.OPEN && 
+                    client.roomId === ws.roomId &&
+                    client.participantId !== ws.participantId) {
                   client.send(JSON.stringify({
-                    type: 'code-update',
-                    codeState,
+                    type: 'violation-detected',
+                    violation: message.violation,
+                    participantId: ws.participantId
                   }));
                 }
               });
             }
             break;
 
-          case 'cursor-position':
-            // Broadcast cursor position to other clients
-            wss.clients.forEach((client: WebSocketWithData) => {
-              if (client !== ws && 
-                  client.readyState === WebSocket.OPEN && 
-                  client.roomId === ws.roomId) {
-                client.send(JSON.stringify({
-                  type: 'cursor-update',
-                  participantId: ws.participantId,
-                  position: message.position,
-                }));
-              }
-            });
-            break;
+
+
+
+
+
         }
       } catch (error) {
         console.error('WebSocket message error:', error);
