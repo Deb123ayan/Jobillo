@@ -22,6 +22,7 @@ export default function Landing() {
   const [joinForm, setJoinForm] = useState({
     name: "",
     code: "",
+    role: "candidate" as "interviewer" | "candidate",
   });
 
   const createRoomMutation = useMutation({
@@ -33,6 +34,12 @@ export default function Landing() {
       return response.json();
     },
     onSuccess: async (data) => {
+      // Show room code to user
+      toast({
+        title: "Room Created!",
+        description: `Room code: ${data.code}. Share this with participants.`,
+      });
+      
       // Join the room as interviewer
       const joinResponse = await apiRequest(
         "POST",
@@ -62,13 +69,13 @@ export default function Landing() {
   });
 
   const joinRoomMutation = useMutation({
-    mutationFn: async (data: { name: string; code: string }) => {
+    mutationFn: async (data: { name: string; code: string; role: string }) => {
       const response = await apiRequest(
         "POST",
         `/api/rooms/${data.code}/join`,
         {
           name: data.name,
-          role: "candidate",
+          role: data.role,
         },
       );
       return response.json();
@@ -147,6 +154,14 @@ export default function Landing() {
                 </p>
               </div>
             </div>
+            <Button
+              onClick={() => setLocation('/rooms')}
+              variant="outline"
+              className="bg-white/50 backdrop-blur-sm border-white/40 hover:bg-white/70"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Manage Rooms
+            </Button>
           </div>
         </div>
       </header>
@@ -312,6 +327,27 @@ export default function Landing() {
                       }
                       className="h-12 rounded-xl border-slate-200 bg-white/50 backdrop-blur-sm focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-center text-lg tracking-wider"
                     />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-slate-700 font-medium">Join as</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button
+                        type="button"
+                        variant={joinForm.role === "candidate" ? "default" : "outline"}
+                        onClick={() => setJoinForm({ ...joinForm, role: "candidate" })}
+                        className="h-10"
+                      >
+                        Candidate
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={joinForm.role === "interviewer" ? "default" : "outline"}
+                        onClick={() => setJoinForm({ ...joinForm, role: "interviewer" })}
+                        className="h-10"
+                      >
+                        Interviewer
+                      </Button>
+                    </div>
                   </div>
                   <Button
                     type="submit"

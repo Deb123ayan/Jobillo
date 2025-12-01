@@ -19,6 +19,8 @@ export const participants = pgTable("participants", {
   role: text("role").notNull(), // "interviewer" | "candidate"
   peerId: text("peer_id"),
   isConnected: boolean("is_connected").default(true),
+  isSpeaking: boolean("is_speaking").default(false),
+  lastSpokeAt: timestamp("last_spoke_at"),
   joinedAt: timestamp("joined_at").defaultNow(),
 });
 

@@ -35,6 +35,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!["interviewer", "candidate"].includes(role)) {
         return res.status(400).json({ error: "Role must be 'interviewer' or 'candidate'" });
       }
+
+      // Allow multiple interviewers
+      const existingParticipants = await storage.getParticipantsByRoom(room.id);
+      const interviewerCount = existingParticipants.filter(p => p.role === 'interviewer').length;
+      const candidateCount = existingParticipants.filter(p => p.role === 'candidate').length;
+      
+      // Limit candidates to 1 but allow multiple interviewers
+      if (role === 'candidate' && candidateCount >= 1) {
+        return res.status(400).json({ error: "This room already has a candidate" });
+      }
       
       const room = await storage.getRoomByCode(code);
       if (!room) {
@@ -113,6 +123,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all rooms
+  app.get("/api/rooms", async (req, res) => {
+    try {
+      const rooms = await storage.getAllRooms();
+      res.json(rooms);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
+  // Get active rooms
+  app.get("/api/rooms/active", async (req, res) => {
+    try {
+      const rooms = await storage.getActiveRooms();
+      res.json(rooms);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+
 
 
   const httpServer = createServer(app);
@@ -180,6 +210,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     type: 'violation-detected',
                     violation: message.violation,
                     participantId: ws.participantId
+                  }));
+                }
+              });
+            }
+            break;
+
+          case 'voice-activity':
+            if (ws.roomId && ws.participantId) {
+              // Broadcast voice activity to all participants in the room
+              wss.clients.forEach((client: WebSocketWithData) => {
+                if (client.readyState === WebSocket.OPEN && 
+                    client.roomId === ws.roomId) {
+                  client.send(JSON.stringify({
+                    type: 'voice-activity-update',
+                    participantId: ws.participantId,
+                    isSpeaking: message.isSpeaking,
+                    timestamp: Date.now()
+                  }));
+                }
+              });
+            }
+            break;
+
+          case 'request-video-switch':
+            if (ws.roomId) {
+              // Notify all participants about video switch request
+              wss.clients.forEach((client: WebSocketWithData) => {
+                if (client.readyState === WebSocket.OPEN && 
+                    client.roomId === ws.roomId) {
+                  client.send(JSON.stringify({
+                    type: 'video-switch-requested',
+                    targetParticipantId: message.targetParticipantId,
+                    requestedBy: ws.participantId
+                  }));
+                }
+              });
+            }
+            break;
+
+          case 'media-status-update':
+            if (ws.roomId && ws.participantId) {
+              // Broadcast media status to all participants
+              wss.clients.forEach((client: WebSocketWithData) => {
+                if (client.readyState === WebSocket.OPEN && 
+                    client.roomId === ws.roomId) {
+                  client.send(JSON.stringify({
+                    type: 'participant-media-status',
+                    participantId: ws.participantId,
+                    hasVideo: message.hasVideo,
+                    hasAudio: message.hasAudio
+                  }));
+                }
+              });
+            }
+            break;
+
+          case 'host-control-media':
+            if (ws.roomId) {
+              // Send media control command to specific participant
+              wss.clients.forEach((client: WebSocketWithData) => {
+                if (client.readyState === WebSocket.OPEN && 
+                    client.roomId === ws.roomId &&
+                    client.participantId === message.targetParticipantId) {
+                  client.send(JSON.stringify({
+                    type: 'media-control-command',
+                    action: message.action, // 'mute-audio', 'disable-video', 'enable-audio', 'enable-video'
+                    fromHost: ws.participantId
                   }));
                 }
               });

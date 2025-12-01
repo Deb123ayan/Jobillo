@@ -10,6 +10,8 @@ export interface IStorage {
   createRoom(room: InsertRoom): Promise<{ room: Room; code: string }>;
   getRoomByCode(code: string): Promise<Room | undefined>;
   getRoom(id: string): Promise<Room | undefined>;
+  getAllRooms(): Promise<Room[]>;
+  getActiveRooms(): Promise<Room[]>;
   
   // Participants
   addParticipant(participant: InsertParticipant): Promise<Participant>;
@@ -26,16 +28,33 @@ export class MemStorage implements IStorage {
   private rooms: Map<string, Room>;
   private participants: Map<string, Participant>;
   private messages: Map<string, Message>;
+  private roomCodes: Set<string>;
 
   constructor() {
     this.rooms = new Map();
     this.participants = new Map();
     this.messages = new Map();
+    this.roomCodes = new Set();
+  }
+
+  private generateUniqueCode(): string {
+    let code: string;
+    let attempts = 0;
+    do {
+      code = Math.floor(100000 + Math.random() * 900000).toString();
+      attempts++;
+      if (attempts > 100) {
+        throw new Error('Unable to generate unique room code');
+      }
+    } while (this.roomCodes.has(code));
+    
+    this.roomCodes.add(code);
+    return code;
   }
 
   async createRoom(insertRoom: InsertRoom): Promise<{ room: Room; code: string }> {
     const id = randomUUID();
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const code = this.generateUniqueCode();
     const room: Room = {
       ...insertRoom,
       id,
@@ -103,7 +122,16 @@ export class MemStorage implements IStorage {
       .sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
   }
 
+  async getAllRooms(): Promise<Room[]> {
+    return Array.from(this.rooms.values())
+      .sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime());
+  }
 
+  async getActiveRooms(): Promise<Room[]> {
+    return Array.from(this.rooms.values())
+      .filter(room => room.isActive)
+      .sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime());
+  }
 }
 
 export const storage = new MemStorage();
