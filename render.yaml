@@ -2,7 +2,7 @@ services:
   - type: web
     name: jobillo
     env: node
-    buildCommand: npm ci && npm run setup-models && npm run build:client
+    buildCommand: npm ci && npm run setup-models && npm run build:client && ls -la && ls -la dist/
     startCommand: npm start
     envVars:
       - key: NODE_ENV
