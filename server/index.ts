@@ -38,7 +38,12 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
+    console.log('🔧 Starting server initialization...');
+    console.log(`   NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`   PORT: ${process.env.PORT || '5000'}`);
+    
     const server = await registerRoutes(app);
+    console.log('✅ Routes registered successfully');
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || err.statusCode || 500;
@@ -54,8 +59,10 @@ app.use((req, res, next) => {
     // setting up all the other routes so the catch-all route
     // doesn't interfere with the other routes
     if (process.env.NODE_ENV === "development") {
+      console.log('🔧 Setting up Vite development server...');
       await setupVite(app, server);
     } else {
+      console.log('🔧 Setting up static file serving...');
       serveStatic(app);
     }
 
@@ -66,9 +73,11 @@ app.use((req, res, next) => {
     const port = parseInt(process.env.PORT || '5000', 10);
     const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
     
+    console.log(`🔧 Attempting to listen on ${host}:${port}...`);
     server.listen(port, host, () => {
       log(`🚀 Server running on ${host}:${port}`);
       log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log('✅ Server is ready to accept connections!');
     });
 
     // Graceful shutdown
@@ -80,7 +89,8 @@ app.use((req, res, next) => {
     });
 
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error('❌ Failed to start server:', error);
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace available');
     process.exit(1);
   }
 })();
