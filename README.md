@@ -137,6 +137,42 @@ The platform is designed to be simple and extensible. Key areas for enhancement:
 4. Test thoroughly
 5. Submit a pull request
 
+## Deployment
+
+### Quick Deploy to Render
+
+1. **Automated Setup** (Recommended):
+   ```bash
+   # On Windows
+   deploy.bat
+   
+   # On macOS/Linux
+   ./deploy.sh
+   ```
+
+2. **Manual Setup**:
+   ```bash
+   npm ci
+   npm run setup-models
+   npm run build
+   ```
+
+3. **Deploy to Render**:
+   - Push to GitHub
+   - Create new Web Service on [Render](https://render.com)
+   - Connect your repository
+   - Render will use the `render.yaml` configuration automatically
+
+### Other Platforms
+
+The application is also configured for:
+- **Railway**: `railway.toml`
+- **Vercel**: `vercel.json`
+- **Netlify**: `netlify.toml`
+- **Docker**: `Dockerfile`
+
+See [DEPLOY.md](./DEPLOY.md) for detailed deployment instructions.
+
 ## License
 
 MIT License - see LICENSE file for details
