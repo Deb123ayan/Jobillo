@@ -36,6 +36,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Role must be 'interviewer' or 'candidate'" });
       }
 
+      const room = await storage.getRoomByCode(code);
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
       // Allow multiple interviewers
       const existingParticipants = await storage.getParticipantsByRoom(room.id);
       const interviewerCount = existingParticipants.filter(p => p.role === 'interviewer').length;
@@ -44,11 +49,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Limit candidates to 1 but allow multiple interviewers
       if (role === 'candidate' && candidateCount >= 1) {
         return res.status(400).json({ error: "This room already has a candidate" });
-      }
-      
-      const room = await storage.getRoomByCode(code);
-      if (!room) {
-        return res.status(404).json({ error: "Room not found" });
       }
 
       const participant = await storage.addParticipant({

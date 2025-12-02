@@ -71,7 +71,7 @@ export default function ScreenShareMonitor({ isJoiner, onScreenShareComplete }: 
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              You must share your screen when joining a room to prevent malpractices.
+              You must share your screen when joining a room to prevent malpractice.
             </AlertDescription>
           </Alert>
           

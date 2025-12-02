@@ -6,7 +6,7 @@ A basic, no-login interview platform for conducting simple video interviews with
 
 - **No Login Required** - Just create a room and share the code
 - **Live Video Streaming** - Real camera access with video preview
-- **Face Analysis & Monitoring** - AI-powered detection of interview malpractices
+- **Face Analysis & Monitoring** - AI-powered detection of interview malpractice
 - **Real-time Chat** - Instant messaging during interviews
 - **Room-based Sessions** - Easy room creation and joining with 6-digit codes
 - **Role-based Access** - Interviewer and candidate roles

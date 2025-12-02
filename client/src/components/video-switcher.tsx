@@ -260,4 +260,6 @@ export default function VideoSwitcher({ participants, currentParticipant, socket
           </Button>
         </div>
       </div>
-    </div>\n  );\n}
+    </div>
+  );
+};
