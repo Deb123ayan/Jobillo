@@ -1,5 +1,10 @@
 node_modules
-dist
+dist/*
+!dist/.gitkeep
+!dist/README.md
+!dist/public/
+dist/public/*
+!dist/public/.gitkeep
 .DS_Store
 server/public
 vite.config.ts.*
