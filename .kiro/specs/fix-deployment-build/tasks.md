@@ -27,12 +27,16 @@
   - [ ] 3.1 Update `serveStatic` function in `server/vite.ts`
     - Replace the fallback behavior with a fail-fast approach
     - Add detailed logging showing the resolved `distPath` value
+
+
     - Exit the process with code 1 if `dist/public` doesn't exist in production
+
     - Keep the proper static file serving and SPA fallback for valid builds
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
 - [ ] 4. Add build verification to package.json scripts
   - Add a `verify` script to package.json that runs the verification
+
   - Update the `build` script to include verification as a final step
   - Ensure the script chain fails properly if any step fails
   - _Requirements: 4.1, 4.2, 4.3_

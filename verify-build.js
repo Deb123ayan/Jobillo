@@ -10,6 +10,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  */
 function verifyBuild() {
   console.log('🔍 Verifying build output...\n');
+  console.log('Debug Info:');
+  console.log(`  - __dirname: ${__dirname}`);
+  console.log(`  - process.cwd(): ${process.cwd()}`);
 
   const distPublicPath = path.resolve(__dirname, 'dist', 'public');
   const distServerPath = path.resolve(__dirname, 'dist', 'index.js');
