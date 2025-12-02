@@ -71,9 +71,13 @@ export function serveStatic(app: Express) {
   const distPath = path.resolve(process.cwd(), "dist", "public");
 
   if (!fs.existsSync(distPath)) {
-    throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`,
-    );
+    console.warn(`Build directory not found: ${distPath}. Serving from fallback.`);
+    // Fallback to serving from current directory if dist doesn't exist
+    app.use(express.static("."));
+    app.use("*", (_req, res) => {
+      res.status(404).send("Application not built. Please run 'npm run build' first.");
+    });
+    return;
   }
 
   app.use(express.static(distPath));
