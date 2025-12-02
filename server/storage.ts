@@ -82,6 +82,8 @@ export class MemStorage implements IStorage {
       id,
       peerId: null,
       isConnected: true,
+      isSpeaking: false,
+      lastSpokeAt: null,
       joinedAt: new Date(),
     };
     this.participants.set(id, participant);
