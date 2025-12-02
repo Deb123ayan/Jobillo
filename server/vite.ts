@@ -69,21 +69,32 @@ export async function setupVite(app: Express, server: Server) {
 
 export function serveStatic(app: Express) {
   const distPath = path.resolve(process.cwd(), "dist", "public");
+  
+  log(`Attempting to serve static files from: ${distPath}`);
 
   if (!fs.existsSync(distPath)) {
-    console.warn(`Build directory not found: ${distPath}. Serving from fallback.`);
-    // Fallback to serving from current directory if dist doesn't exist
-    app.use(express.static("."));
-    app.use("*", (_req, res) => {
-      res.status(404).send("Application not built. Please run 'npm run build' first.");
-    });
-    return;
+    console.error(`❌ FATAL ERROR: Build directory not found at ${distPath}`);
+    console.error('The application cannot start without the built frontend assets.');
+    console.error('This usually means the build process did not complete successfully.');
+    console.error('Please check the build logs and ensure "npm run build" completes without errors.');
+    process.exit(1);
   }
 
+  // Verify index.html exists
+  const indexPath = path.resolve(distPath, "index.html");
+  if (!fs.existsSync(indexPath)) {
+    console.error(`❌ FATAL ERROR: index.html not found at ${indexPath}`);
+    console.error('The build directory exists but is missing critical files.');
+    console.error('Please run "npm run build" to rebuild the application.');
+    process.exit(1);
+  }
+
+  log(`✅ Successfully located build directory with ${fs.readdirSync(distPath).length} items`);
+  
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
+  // fall through to index.html if the file doesn't exist (SPA fallback)
   app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+    res.sendFile(indexPath);
   });
 }

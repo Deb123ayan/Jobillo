@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "build": "npm run build:client && npm run build:server",
+    "build": "npm run build:client && npm run build:server && npm run verify",
     "build:client": "vite build",
     "build:server": "esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=./dist/index.js",
+    "verify": "node verify-build.js",
     "start": "tsx server/index.ts",
     "server:dev": "tsx watch server/index.ts",
     "client:dev": "vite",

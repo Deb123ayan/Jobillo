@@ -22,9 +22,11 @@ git push origin main
 ### 3. Configure Service
 - **Name**: `jobillo` (or your preferred name)
 - **Environment**: `Node`
-- **Build Command**: `npm ci && npm run setup-models && npm run build`
+- **Build Command**: `npm ci && npm run setup-models && npm run build && node verify-build.js`
 - **Start Command**: `npm start`
 - **Instance Type**: Free (or paid for better performance)
+
+**Note**: The build command includes a verification step that ensures all required files are built correctly before deployment.
 
 ### 4. Environment Variables
 Set the following in Render dashboard:
@@ -63,10 +65,24 @@ Click "Create Web Service" - Render will automatically deploy your app.
 - Verify Node.js version compatibility
 - Check build logs for specific errors
 
+### Build Verification Failures
+If you see "Build verification failed" in the logs:
+- Check that both `npm run build:client` and `npm run build:server` completed successfully
+- Verify that `dist/public/index.html` exists after the build
+- Ensure the `dist/public/assets` directory was created
+- Look for any Vite or esbuild errors earlier in the build logs
+
+The verification script checks for:
+- `dist/public/` directory exists
+- `dist/public/index.html` file exists
+- `dist/public/assets/` directory exists
+- `dist/index.js` server bundle exists
+
 ### Runtime Issues
 - Check application logs in Render dashboard
 - Verify environment variables are set correctly
 - Test locally with `NODE_ENV=production npm start`
+- If you see "Build directory not found" error, the build process did not complete successfully
 
 ### Performance Issues
 - Consider upgrading to a paid Render plan
