@@ -1,9 +1,8 @@
 services:
   - type: web
     name: jobillo
-    env: node
-    buildCommand: npm ci && npm run setup-models && npm run build
-    startCommand: pwd && ls -la && ls -la dist/ && npm start
+    env: docker
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: NODE_ENV
         value: production

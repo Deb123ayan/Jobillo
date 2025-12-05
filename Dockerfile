@@ -2,12 +2,21 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
-RUN npm ci --only=production
 
+# Install all dependencies (including dev for build)
+RUN npm ci
+
+# Copy source code
 COPY . .
-RUN npm run build
 
+# Download models and build
+RUN npm run setup-models
+RUN npm run build:client
+
+# Expose port
 EXPOSE 5000
 
-CMD ["npm", "run", "start"]
+# Start with tsx
+CMD ["npm", "start"]
